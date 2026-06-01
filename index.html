@@ -1,184 +1,814 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Penalty Shootout</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, touch-action: manipulation">
+  <title>⚽ STRIKER ARENA · 2D Football Game</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-<style>
-body{
-margin:0;
-background:#1b5e20;
-font-family:Arial;
-text-align:center;
-overflow:hidden;
-}
+    body {
+      background: linear-gradient(145deg, #0a1f2e 0%, #1a3a2e 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Segoe UI', 'Poppins', system-ui, sans-serif;
+      padding: 20px;
+      margin: 0;
+    }
 
-#ui{
-color:white;
-font-size:28px;
-padding:10px;
-}
+    /* GAME CONTAINER – stadium-like card */
+    .game-container {
+      background: radial-gradient(circle at 20% 20%, #2d5a3b, #0f2b1a);
+      border-radius: 60px 60px 40px 40px;
+      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.7), inset 0 2px 10px rgba(255, 255, 200, 0.4);
+      padding: 20px 20px 25px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border: 2px solid #e5c97b;
+      max-width: 800px;
+      width: fit-content;
+      margin: auto;
+    }
 
-canvas{
-background:#43a047;
-display:block;
-margin:auto;
-}
+    /* SCOREBOARD + TIMER */
+    .scoreboard {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10, 20, 10, 0.8);
+      backdrop-filter: blur(10px);
+      border-radius: 100px;
+      padding: 12px 25px;
+      margin-bottom: 15px;
+      color: #f7e05e;
+      font-weight: bold;
+      font-size: 1.8rem;
+      letter-spacing: 2px;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.6), inset 0 1px 6px #ffeeaa;
+      border: 1px solid #c9a53b;
+    }
 
-#shootBtn{
-position:fixed;
-bottom:20px;
-left:50%;
-transform:translateX(-50%);
-width:120px;
-height:60px;
-font-size:24px;
-border:none;
-border-radius:15px;
-}
-</style>
+    .team {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .badge {
+      background: #1e3b2f;
+      padding: 6px 18px;
+      border-radius: 30px;
+      color: white;
+      font-size: 1.3rem;
+      text-shadow: 0 2px 4px black;
+    }
+
+    .timer-box {
+      background: #00000033;
+      padding: 8px 25px;
+      border-radius: 40px;
+      font-size: 2rem;
+      color: #ffd966;
+      box-shadow: inset 0 0 12px #ffb700;
+    }
+
+    canvas {
+      display: block;
+      margin: 0 auto;
+      border-radius: 50px;
+      background: radial-gradient(circle at 50% 40%, #3c8230, #1e4a1a);
+      box-shadow: inset 0 -10px 25px rgba(0,0,0,0.8), 0 20px 35px rgba(0, 0, 0, 0.8);
+      border: 3px solid #b49450;
+      width: 100%;
+      height: auto;
+      max-width: 700px;
+      touch-action: none;  /* prevent pull-to-refresh on mobile */
+    }
+
+    .controls-panel {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+      width: 100%;
+    }
+
+    .btn {
+      background: #f5e56c;
+      border: none;
+      border-radius: 50px;
+      padding: 14px 28px;
+      font-weight: bold;
+      font-size: 1.2rem;
+      letter-spacing: 1px;
+      color: #1a3b1a;
+      background: linear-gradient(180deg, #ffd966 0%, #dba524 100%);
+      box-shadow: 0 6px 0 #7a5d1a, 0 10px 20px rgba(0,0,0,0.5);
+      cursor: pointer;
+      transition: all 0.08s ease;
+      text-transform: uppercase;
+      border: 1px solid #ffe484;
+      touch-action: manipulation;
+    }
+
+    .btn:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 #7a5d1a, 0 8px 15px rgba(0,0,0,0.6);
+      background: #f5c542;
+    }
+
+    .mobile-controls {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .dpad {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .dpad-row {
+      display: flex;
+      gap: 15px;
+    }
+
+    .ctrl-btn {
+      background: #2c3e2c;
+      color: white;
+      font-size: 2rem;
+      width: 60px;
+      height: 60px;
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 30% 30%, #5b7a4a, #1e3312);
+      box-shadow: 0 5px 0 #0f1f0a, 0 8px 15px black;
+      border: 1px solid #b6a86b;
+      user-select: none;
+      touch-action: manipulation;
+      cursor: pointer;
+    }
+
+    .ctrl-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 #0f1f0a;
+    }
+
+    .kick-btn {
+      background: #d94f4f;
+      background: radial-gradient(circle at 30% 30%, #ff7b7b, #b32b2b);
+      font-size: 1.8rem;
+      width: 80px;
+    }
+
+    @media (max-width: 600px) {
+      .scoreboard {
+        font-size: 1.2rem;
+        padding: 8px 15px;
+      }
+      .btn {
+        padding: 10px 18px;
+        font-size: 1rem;
+      }
+    }
+  </style>
 </head>
 <body>
+<div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+  <div class="game-container">
+    <!-- SCORE & TIMER -->
+    <div class="scoreboard">
+      <div class="team"><span class="badge">👤 YOU</span> <span id="playerScore">0</span></div>
+      <div class="timer-box" id="timerDisplay">90</div>
+      <div class="team"><span id="aiScore">0</span> <span class="badge">🤖 AI</span></div>
+    </div>
 
-<div id="ui">
-Score: <span id="score">0</span> |
-Shots: <span id="shots">5</span>
+    <!-- GAME CANVAS -->
+    <canvas id="gameCanvas" width="700" height="400" aria-label="2D football field"></canvas>
+
+    <!-- CONTROLS -->
+    <div class="controls-panel">
+      <button class="btn" id="restartButton">↺ RESTART</button>
+      <div class="mobile-controls">
+        <div class="dpad">
+          <div class="dpad-row">
+            <div class="ctrl-btn" id="btnUp">▲</div>
+          </div>
+          <div class="dpad-row">
+            <div class="ctrl-btn" id="btnLeft">◀</div>
+            <div class="ctrl-btn" id="btnDown">▼</div>
+            <div class="ctrl-btn" id="btnRight">▶</div>
+          </div>
+        </div>
+        <div class="ctrl-btn kick-btn" id="btnKick">⚡KICK</div>
+      </div>
+    </div>
+    <div style="color:#ddd; margin-top: 5px; font-size: 0.8rem;">⬆️⬇️⬅️➡️ or WASD · SPACE to kick</div>
+  </div>
 </div>
 
-<canvas id="game" width="900" height="500"></canvas>
-
-<button id="shootBtn">⚽ SHOOT</button>
-
 <script>
+  (function() {
+    // ⚙️ CANVAS & CONTEXT
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
 
-const canvas=document.getElementById("game");
-const ctx=canvas.getContext("2d");
+    // 🖥️ UI ELEMENTS
+    const playerScoreSpan = document.getElementById('playerScore');
+    const aiScoreSpan = document.getElementById('aiScore');
+    const timerDisplay = document.getElementById('timerDisplay');
 
-let score=0;
-let shots=5;
+    // 📐 FIELD DIMENSIONS (constants)
+    const FIELD = {
+      WIDTH: 700,
+      HEIGHT: 400,
+      GOAL_Y_TOP: 140,      // goal area vertical range
+      GOAL_Y_BOTTOM: 260,
+      GOAL_DEPTH: 12,       // how deep goals are drawn
+      LEFT_GOAL_X: 15,
+      RIGHT_GOAL_X: 685
+    };
 
-const ball={
-x:450,
-y:420,
-r:12
-};
+    // 🎮 GAME STATE
+    let gameActive = true;
+    let matchTime = 90;            // seconds
+    let timerInterval = null;
+    let playerScore = 0;
+    let aiScore = 0;
 
-const keeper={
-x:400,
-y:80,
-w:100,
-h:20
-};
+    // 🏃 PLAYER OBJECT
+    const player = {
+      x: 180, y: 200,
+      radius: 18,
+      speed: 4.2,
+      color: '#3b7dd8',
+      shadowColor: '#0a2f5a'
+    };
 
-let moving=false;
-let ballX=450;
-let ballY=420;
+    // 🤖 AI OPPONENT
+    const ai = {
+      x: 520, y: 200,
+      radius: 18,
+      speed: 2.9,           // slightly slower for balance
+      color: '#d94f4f',
+      shadowColor: '#5e1e1e',
+      targetX: 520,
+      targetY: 200
+    };
 
-function resetBall(){
-ballX=450;
-ballY=420;
-moving=false;
-}
+    // ⚽ BALL
+    const ball = {
+      x: 350, y: 200,
+      radius: 10,
+      vx: 0,
+      vy: 0,
+      friction: 0.985,
+      maxSpeed: 9.5,
+      color: '#f5f5f5',
+      shadowColor: '#555'
+    };
 
-document.getElementById("shootBtn").onclick=()=>{
+    // 🕹️ INPUT STATE (keyboard)
+    const keys = {
+      ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false,
+      w: false, a: false, s: false, d: false,
+      space: false
+    };
 
-if(moving || shots<=0) return;
+    // 📱 TOUCH/MOBILE BUTTON STATE
+    const mobileMove = { up: false, down: false, left: false, right: false };
 
-shots--;
-document.getElementById("shots").innerText=shots;
+    // 🧠 AI BEHAVIOR TIMER (decision cooldown)
+    let aiDecisionCooldown = 0;
 
-moving=true;
+    // ---------- HELPER: RESET MATCH ----------
+    function resetMatch() {
+      // Stop timer
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = null;
 
-keeper.x=Math.random()*700+100;
+      // Reset positions
+      player.x = 180; player.y = 200;
+      ai.x = 520; ai.y = 200;
+      ball.x = 350; ball.y = 200;
+      ball.vx = 0; ball.vy = 0;
 
-};
+      // Reset scores & time
+      playerScore = 0;
+      aiScore = 0;
+      matchTime = 90;
+      updateScoreDisplay();
 
-function update(){
+      gameActive = true;
+      aiDecisionCooldown = 0;
 
-if(moving){
+      // Restart timer
+      startTimer();
+    }
 
-ballY-=8;
+    // ---------- TIMER LOGIC ----------
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        if (!gameActive) return; // pause when game over
 
-if(ballY<100){
+        matchTime--;
+        timerDisplay.textContent = matchTime;
 
-if(ballX>keeper.x &&
-ballX<keeper.x+keeper.w){
+        if (matchTime <= 0) {
+          matchTime = 0;
+          timerDisplay.textContent = "0";
+          endGame();
+        }
+      }, 1000);
+    }
 
-alert("Saved!");
+    function endGame() {
+      gameActive = false;
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = null;
+      // stop ball movement completely
+      ball.vx = 0; ball.vy = 0;
+    }
 
-}else{
+    function updateScoreDisplay() {
+      playerScoreSpan.textContent = playerScore;
+      aiScoreSpan.textContent = aiScore;
+    }
 
-score++;
-document.getElementById("score").innerText=score;
+    // ---------- GOAL DETECTION ----------
+    function checkGoal() {
+      // Left goal (AI scores) → ball enters left goal area
+      if (ball.x - ball.radius < FIELD.LEFT_GOAL_X &&
+          ball.y > FIELD.GOAL_Y_TOP && ball.y < FIELD.GOAL_Y_BOTTOM) {
+        // AI scores!
+        aiScore++;
+        updateScoreDisplay();
+        playGoalSound();
+        resetBallAfterGoal('ai');
+      }
+      // Right goal (Player scores)
+      else if (ball.x + ball.radius > FIELD.RIGHT_GOAL_X &&
+               ball.y > FIELD.GOAL_Y_TOP && ball.y < FIELD.GOAL_Y_BOTTOM) {
+        playerScore++;
+        updateScoreDisplay();
+        playGoalSound();
+        resetBallAfterGoal('player');
+      }
+    }
 
-alert("GOAL!");
+    function resetBallAfterGoal(scorer) {
+      // Place ball at center, give slight momentum toward scorer's opponent side (kickoff style)
+      ball.x = FIELD.WIDTH / 2;
+      ball.y = FIELD.HEIGHT / 2;
+      ball.vx = 0;
+      ball.vy = 0;
+      // Small random direction to avoid dead stops
+      ball.vx = (Math.random() * 2 - 1) * 1.5;
+      ball.vy = (Math.random() * 2 - 1) * 1.5;
 
-}
+      // Reset player/AI positions slightly
+      player.x = 180; player.y = 200;
+      ai.x = 520; ai.y = 200;
+    }
 
-resetBall();
+    // ---------- SIMPLE SOUND FX (using Web Audio) ----------
+    function playKickSound() {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        oscillator.type = 'square';
+        oscillator.frequency.setValueAtTime(180, audioCtx.currentTime);
+        gainNode.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.1);
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + 0.1);
+      } catch (e) { /* ignore */ }
+    }
 
-if(shots===0){
+    function playGoalSound() {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(520, audioCtx.currentTime);
+        osc.frequency.linearRampToValueAtTime(780, audioCtx.currentTime + 0.2);
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.4);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.4);
+      } catch (e) { /* ignore */ }
+    }
 
-setTimeout(()=>{
+    // ---------- KICK MECHANICS (player kicks ball) ----------
+    function playerKickBall() {
+      if (!gameActive) return;
+      // Calculate direction from player to ball
+      let dx = ball.x - player.x;
+      let dy = ball.y - player.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
 
-if(score>=3)
-alert("YOU WIN!");
+      // Only kick if ball is within reasonable range (player radius + ball radius + small margin)
+      const kickRange = player.radius + ball.radius + 15;
+      if (dist < kickRange) {
+        // Normalize direction and apply kick power
+        if (dist > 0.5) {
+          dx /= dist;
+          dy /= dist;
+        } else {
+          dx = 1; dy = 0; // default direction if exactly overlapping
+        }
+        const kickPower = 8.2;
+        ball.vx = dx * kickPower;
+        ball.vy = dy * kickPower;
+        // Clamp max speed
+        limitBallSpeed();
+        playKickSound();
+      }
+    }
 
-else
-alert("YOU LOSE!");
+    // AI can also kick (called from AI logic)
+    function aiKickBall() {
+      if (!gameActive) return;
+      let dx = ball.x - ai.x;
+      let dy = ball.y - ai.y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      const kickRange = ai.radius + ball.radius + 14;
+      if (dist < kickRange) {
+        if (dist > 0.5) {
+          dx /= dist;
+          dy /= dist;
+        } else {
+          dx = -1; dy = 0;
+        }
+        // AI aims toward player's goal (left side) with some variation
+        const targetDirX = -0.9 + (Math.random() * 0.4 - 0.2);
+        const targetDirY = (ball.y < 200 ? 0.25 : -0.25) + (Math.random() * 0.5 - 0.25);
+        const aimX = targetDirX;
+        const aimY = targetDirY;
+        const len = Math.sqrt(aimX*aimX + aimY*aimY);
+        ball.vx = (aimX / len) * 7.6;
+        ball.vy = (aimY / len) * 7.6;
+        limitBallSpeed();
+        playKickSound();
+      }
+    }
 
-},200);
+    function limitBallSpeed() {
+      const sp = Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy);
+      if (sp > ball.maxSpeed) {
+        ball.vx *= ball.maxSpeed / sp;
+        ball.vy *= ball.maxSpeed / sp;
+      }
+    }
 
-}
+    // ---------- AI INTELLIGENCE (defense + attack) ----------
+    function updateAI() {
+      if (!gameActive) return;
 
-}
+      // Simple decision cooldown for AI movement adjustments
+      aiDecisionCooldown--;
+      if (aiDecisionCooldown <= 0) {
+        aiDecisionCooldown = 8; // frames between decisions
 
-}
+        // Determine if AI should attack (ball closer to opponent goal) or defend
+        const ballDistToAIGoal = Math.abs(ball.x - FIELD.LEFT_GOAL_X); // AI defends left goal
+        const aiToBallDist = Math.sqrt((ai.x - ball.x) ** 2 + (ai.y - ball.y) ** 2);
 
-}
+        // Attack behavior: if ball is on opponent's half (right side) or AI is near ball, move toward ball aggressively
+        if (ball.x > 350 || aiToBallDist < 130) {
+          // Attack: move toward ball with offset to kick towards left goal
+          ai.targetX = ball.x - 15; // slightly behind ball towards opponent goal
+          ai.targetY = ball.y + (ai.y > ball.y ? -15 : 15);
+        } else {
+          // Defense: position between ball and own goal
+          ai.targetX = Math.min(ball.x + 50, 280);
+          ai.targetY = ball.y;
+        }
 
-canvas.addEventListener("click",(e)=>{
+        // Clamp target within field boundaries (avoid going into goals)
+        ai.targetX = Math.min(660, Math.max(40, ai.targetX));
+        ai.targetY = Math.min(360, Math.max(40, ai.targetY));
+      }
 
-const rect=canvas.getBoundingClientRect();
+      // Move AI smoothly toward target
+      let dx = ai.targetX - ai.x;
+      let dy = ai.targetY - ai.y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist > 2) {
+        dx /= dist;
+        dy /= dist;
+        ai.x += dx * ai.speed;
+        ai.y += dy * ai.speed;
+      }
 
-ballX=e.clientX-rect.left;
+      // Boundary clamping for AI
+      ai.x = Math.min(670, Math.max(30, ai.x));
+      ai.y = Math.min(370, Math.max(30, ai.y));
 
-});
+      // AI kick decision: if very close to ball and facing roughly correct direction
+      if (gameActive && Math.sqrt((ai.x-ball.x)**2 + (ai.y-ball.y)**2) < ai.radius + ball.radius + 14) {
+        // occasional kick (not every frame to avoid spam)
+        if (Math.random() < 0.08) {
+          aiKickBall();
+        }
+      }
+    }
 
-function draw(){
+    // ---------- COLLISION & PHYSICS ----------
+    function handleCollisions() {
+      // Ball vs field boundaries (bounce off top/bottom, except goal areas)
+      if (ball.y - ball.radius < 5) {
+        ball.y = ball.radius + 5;
+        ball.vy *= -0.6;
+      }
+      if (ball.y + ball.radius > FIELD.HEIGHT - 5) {
+        ball.y = FIELD.HEIGHT - 5 - ball.radius;
+        ball.vy *= -0.6;
+      }
 
-ctx.clearRect(0,0,900,500);
+      // Left/right walls (but allow goal entry)
+      if (ball.x - ball.radius < 5 && !(ball.y > FIELD.GOAL_Y_TOP && ball.y < FIELD.GOAL_Y_BOTTOM)) {
+        ball.x = ball.radius + 5;
+        ball.vx *= -0.55;
+      }
+      if (ball.x + ball.radius > FIELD.WIDTH - 5 && !(ball.y > FIELD.GOAL_Y_TOP && ball.y < FIELD.GOAL_Y_BOTTOM)) {
+        ball.x = FIELD.WIDTH - 5 - ball.radius;
+        ball.vx *= -0.55;
+      }
 
-ctx.fillStyle="white";
+      // Collision with player
+      resolveCollision(player, ball);
+      // Collision with AI
+      resolveCollision(ai, ball);
 
-ctx.fillRect(300,40,300,60);
+      // Player / AI boundary clamp
+      player.x = Math.min(680, Math.max(20, player.x));
+      player.y = Math.min(370, Math.max(20, player.y));
+      ai.x = Math.min(680, Math.max(20, ai.x));
+      ai.y = Math.min(370, Math.max(20, ai.y));
+    }
 
-ctx.fillStyle="red";
+    function resolveCollision(entity, ballRef) {
+      const dx = ballRef.x - entity.x;
+      const dy = ballRef.y - entity.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      const minDist = entity.radius + ballRef.radius;
 
-ctx.fillRect(
-keeper.x,
-keeper.y,
-keeper.w,
-keeper.h
-);
+      if (dist < minDist && dist > 0.01) {
+        // push ball out
+        const angle = Math.atan2(dy, dx);
+        const overlap = minDist - dist;
+        ballRef.x += Math.cos(angle) * overlap;
+        ballRef.y += Math.sin(angle) * overlap;
 
-ctx.beginPath();
-ctx.arc(ballX,ballY,12,0,Math.PI*2);
-ctx.fill();
+        // transfer velocity (simplified bounce)
+        const nx = dx / dist;
+        const ny = dy / dist;
+        const vn = ballRef.vx * nx + ballRef.vy * ny;
+        if (vn < 0) {
+          ballRef.vx -= 1.8 * vn * nx;
+          ballRef.vy -= 1.8 * vn * ny;
+        }
+        limitBallSpeed();
+      }
+    }
 
-}
+    // ---------- MOVEMENT UPDATE ----------
+    function updateMovement() {
+      if (!gameActive) return;
 
-function loop(){
+      // Determine movement direction from keyboard + mobile
+      let moveX = 0, moveY = 0;
+      if (keys.ArrowRight || keys.d || mobileMove.right) moveX += 1;
+      if (keys.ArrowLeft || keys.a || mobileMove.left) moveX -= 1;
+      if (keys.ArrowDown || keys.s || mobileMove.down) moveY += 1;
+      if (keys.ArrowUp || keys.w || mobileMove.up) moveY -= 1;
 
-update();
-draw();
+      if (moveX !== 0 || moveY !== 0) {
+        const len = Math.sqrt(moveX*moveX + moveY*moveY);
+        moveX /= len;
+        moveY /= len;
+        player.x += moveX * player.speed;
+        player.y += moveY * player.speed;
+      }
 
-requestAnimationFrame(loop);
+      // Ball physics
+      ball.vx *= ball.friction;
+      ball.vy *= ball.friction;
+      ball.x += ball.vx;
+      ball.y += ball.vy;
 
-}
+      // Stop tiny velocities
+      if (Math.abs(ball.vx) < 0.08) ball.vx = 0;
+      if (Math.abs(ball.vy) < 0.08) ball.vy = 0;
+    }
 
-loop();
+    // ---------- RENDERING (high quality stadium style) ----------
+    function drawField() {
+      ctx.clearRect(0, 0, FIELD.WIDTH, FIELD.HEIGHT);
 
+      // Grass pattern with gradient
+      const grassGrad = ctx.createLinearGradient(0, 0, 0, FIELD.HEIGHT);
+      grassGrad.addColorStop(0, '#2d6a1f');
+      grassGrad.addColorStop(0.7, '#1f4d13');
+      ctx.fillStyle = grassGrad;
+      ctx.fillRect(0, 0, FIELD.WIDTH, FIELD.HEIGHT);
+
+      // Field stripes (subtle)
+      ctx.fillStyle = '#3c8230';
+      for (let i = 0; i < FIELD.WIDTH; i += 55) {
+        ctx.fillRect(i, 0, 25, FIELD.HEIGHT);
+      }
+
+      // Center circle
+      ctx.beginPath();
+      ctx.arc(FIELD.WIDTH/2, FIELD.HEIGHT/2, 65, 0, Math.PI*2);
+      ctx.strokeStyle = '#ffffffcc';
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(FIELD.WIDTH/2, FIELD.HEIGHT/2, 4, 0, 2*Math.PI);
+      ctx.fillStyle = '#ffffffdd';
+      ctx.fill();
+
+      // Goals (left & right)
+      drawGoal(FIELD.LEFT_GOAL_X, FIELD.GOAL_Y_TOP, FIELD.GOAL_Y_BOTTOM, 'left');
+      drawGoal(FIELD.RIGHT_GOAL_X, FIELD.GOAL_Y_TOP, FIELD.GOAL_Y_BOTTOM, 'right');
+    }
+
+    function drawGoal(x, yTop, yBottom, side) {
+      ctx.fillStyle = '#cccccc55';
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 3;
+      const width = 8;
+      const xPos = side === 'left' ? x - 6 : x + 6;
+      ctx.fillRect(xPos-4, yTop, 8, yBottom - yTop);
+      ctx.strokeRect(xPos-4, yTop, 8, yBottom - yTop);
+    }
+
+    function drawEntity(entity, label) {
+      // Shadow
+      ctx.beginPath();
+      ctx.arc(entity.x, entity.y+2, entity.radius, 0, 2*Math.PI);
+      ctx.fillStyle = '#00000055';
+      ctx.fill();
+      // Main circle
+      const grad = ctx.createRadialGradient(entity.x-4, entity.y-4, 2, entity.x, entity.y, entity.radius);
+      grad.addColorStop(0, entity.color);
+      grad.addColorStop(0.9, entity.shadowColor);
+      ctx.beginPath();
+      ctx.arc(entity.x, entity.y, entity.radius, 0, 2*Math.PI);
+      ctx.fillStyle = grad;
+      ctx.fill();
+      ctx.strokeStyle = 'white';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+
+    function drawBall() {
+      ctx.beginPath();
+      ctx.arc(ball.x, ball.y+1, ball.radius, 0, 2*Math.PI);
+      ctx.fillStyle = '#22222288';
+      ctx.fill();
+      const ballGrad = ctx.createRadialGradient(ball.x-2, ball.y-2, 2, ball.x, ball.y, ball.radius);
+      ballGrad.addColorStop(0, '#f9f9f9');
+      ballGrad.addColorStop(0.8, '#b0b0b0');
+      ctx.beginPath();
+      ctx.arc(ball.x, ball.y, ball.radius, 0, 2*Math.PI);
+      ctx.fillStyle = ballGrad;
+      ctx.fill();
+      ctx.strokeStyle = '#222';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
+
+    function render() {
+      drawField();
+      drawEntity(player, 'YOU');
+      drawEntity(ai, 'AI');
+      drawBall();
+
+      // Game over overlay
+      if (!gameActive) {
+        ctx.globalAlpha = 0.7;
+        ctx.fillStyle = '#0a1a0a';
+        ctx.fillRect(0, 0, FIELD.WIDTH, FIELD.HEIGHT);
+        ctx.globalAlpha = 1;
+        ctx.font = 'bold 32px "Segoe UI"';
+        ctx.fillStyle = '#ffd966';
+        ctx.shadowColor = '#000';
+        ctx.shadowBlur = 14;
+        ctx.textAlign = 'center';
+        ctx.fillText('⏱️ MATCH OVER', FIELD.WIDTH/2, FIELD.HEIGHT/2-20);
+        ctx.shadowBlur = 0;
+        ctx.shadowColor = 'transparent';
+      }
+    }
+
+    // ---------- GAME LOOP ----------
+    function gameLoop() {
+      updateMovement();
+      handleCollisions();
+      checkGoal();
+      updateAI();
+      render();
+      requestAnimationFrame(gameLoop);
+    }
+
+    // ---------- EVENT LISTENERS ----------
+    window.addEventListener('keydown', (e) => {
+      const key = e.key;
+      if (key === 'ArrowUp' || key === 'ArrowDown' || key === 'ArrowLeft' || key === 'ArrowRight' ||
+          key === 'w' || key === 'a' || key === 's' || key === 'd') {
+        e.preventDefault();
+        if (key in keys) keys[key] = true;
+      }
+      if (key === ' ') {
+        e.preventDefault();
+        keys.space = true;
+        playerKickBall();
+      }
+    });
+
+    window.addEventListener('keyup', (e) => {
+      const key = e.key;
+      if (key === 'ArrowUp' || key === 'ArrowDown' || key === 'ArrowLeft' || key === 'ArrowRight' ||
+          key === 'w' || key === 'a' || key === 's' || key === 'd') {
+        e.preventDefault();
+        if (key in keys) keys[key] = false;
+      }
+      if (key === ' ') {
+        e.preventDefault();
+        keys.space = false;
+      }
+    });
+
+    // Mobile button handlers
+    function setupMobileButton(id, action, value) {
+      const btn = document.getElementById(id);
+      if (!btn) return;
+      btn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        action(value, true);
+      });
+      btn.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        action(value, false);
+      });
+      btn.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        action(value, true);
+      });
+      btn.addEventListener('mouseup', (e) => {
+        e.preventDefault();
+        action(value, false);
+      });
+    }
+
+    setupMobileButton('btnUp', (dir, val) => { mobileMove.up = val; }, 'up');
+    setupMobileButton('btnDown', (dir, val) => { mobileMove.down = val; }, 'down');
+    setupMobileButton('btnLeft', (dir, val) => { mobileMove.left = val; }, 'left');
+    setupMobileButton('btnRight', (dir, val) => { mobileMove.right = val; }, 'right');
+
+    document.getElementById('btnKick').addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      playerKickBall();
+    });
+    document.getElementById('btnKick').addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      playerKickBall();
+    });
+
+    document.getElementById('restartButton').addEventListener('click', () => {
+      resetMatch();
+    });
+
+    // Initial start
+    resetMatch();
+    gameLoop();
+  })();
 </script>
 </body>
 </html>
