@@ -2,274 +2,182 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Football Pro</title>
+<title>Penalty Shootout</title>
+
 <style>
 body{
 margin:0;
-overflow:hidden;
-background:#222;
+background:#1b5e20;
 font-family:Arial;
+text-align:center;
+overflow:hidden;
 }
 
 #ui{
-position:absolute;
-top:10px;
-left:50%;
-transform:translateX(-50%);
 color:white;
 font-size:28px;
-font-weight:bold;
-z-index:10;
+padding:10px;
 }
 
 canvas{
+background:#43a047;
 display:block;
 margin:auto;
-background:#27ae60;
+}
+
+#shootBtn{
+position:fixed;
+bottom:20px;
+left:50%;
+transform:translateX(-50%);
+width:120px;
+height:60px;
+font-size:24px;
+border:none;
+border-radius:15px;
 }
 </style>
 </head>
 <body>
 
 <div id="ui">
-<span id="score">0 - 0</span>
-|
-<span id="time">90</span>s
+Score: <span id="score">0</span> |
+Shots: <span id="shots">5</span>
 </div>
 
-<canvas id="game" width="1000" height="600"></canvas>
+<canvas id="game" width="900" height="500"></canvas>
+
+<button id="shootBtn">⚽ SHOOT</button>
 
 <script>
 
 const canvas=document.getElementById("game");
 const ctx=canvas.getContext("2d");
 
-let blueScore=0;
-let redScore=0;
-let matchTime=90;
-
-const player={
-x:200,
-y:300,
-r:22,
-speed:5
-};
-
-const ai={
-x:800,
-y:300,
-r:22,
-speed:3
-};
+let score=0;
+let shots=5;
 
 const ball={
-x:500,
-y:300,
-r:12,
-vx:0,
-vy:0
+x:450,
+y:420,
+r:12
 };
 
-const keys={};
+const keeper={
+x:400,
+y:80,
+w:100,
+h:20
+};
 
-document.addEventListener("keydown",e=>{
-keys[e.key.toLowerCase()]=true;
-});
-
-document.addEventListener("keyup",e=>{
-keys[e.key.toLowerCase()]=false;
-});
-
-setInterval(()=>{
-if(matchTime>0){
-matchTime--;
-document.getElementById("time").innerText=matchTime;
-}
-},1000);
+let moving=false;
+let ballX=450;
+let ballY=420;
 
 function resetBall(){
-
-ball.x=500;
-ball.y=300;
-ball.vx=0;
-ball.vy=0;
-
-player.x=200;
-player.y=300;
-
-ai.x=800;
-ai.y=300;
-
+ballX=450;
+ballY=420;
+moving=false;
 }
 
-function kickCheck(p){
+document.getElementById("shootBtn").onclick=()=>{
 
-let dx=ball.x-p.x;
-let dy=ball.y-p.y;
+if(moving || shots<=0) return;
 
-let dist=Math.sqrt(dx*dx+dy*dy);
+shots--;
+document.getElementById("shots").innerText=shots;
 
-if(dist<35){
+moving=true;
 
-ball.vx=dx*0.35;
-ball.vy=dy*0.35;
+keeper.x=Math.random()*700+100;
 
-}
-
-}
+};
 
 function update(){
 
-if(matchTime<=0) return;
+if(moving){
 
-if(keys["w"]) player.y-=player.speed;
-if(keys["s"]) player.y+=player.speed;
-if(keys["a"]) player.x-=player.speed;
-if(keys["d"]) player.x+=player.speed;
+ballY-=8;
 
-player.x=Math.max(0,Math.min(1000,player.x));
-player.y=Math.max(0,Math.min(600,player.y));
+if(ballY<100){
 
-if(ball.x>ai.x) ai.x+=ai.speed;
-if(ball.x<ai.x) ai.x-=ai.speed;
+if(ballX>keeper.x &&
+ballX<keeper.x+keeper.w){
 
-if(ball.y>ai.y) ai.y+=ai.speed;
-if(ball.y<ai.y) ai.y-=ai.speed;
+alert("Saved!");
 
-kickCheck(player);
-kickCheck(ai);
+}else{
 
-ball.x+=ball.vx;
-ball.y+=ball.vy;
+score++;
+document.getElementById("score").innerText=score;
 
-ball.vx*=0.985;
-ball.vy*=0.985;
+alert("GOAL!");
 
-if(ball.y<0 || ball.y>600)
-ball.vy*=-1;
+}
 
-if(ball.x<40 &&
-ball.y>220 &&
-ball.y<380){
-
-redScore++;
-document.getElementById("score").innerText=
-blueScore+" - "+redScore;
 resetBall();
 
-}
+if(shots===0){
 
-if(ball.x>960 &&
-ball.y>220 &&
-ball.y<380){
+setTimeout(()=>{
 
-blueScore++;
-document.getElementById("score").innerText=
-blueScore+" - "+redScore;
-resetBall();
+if(score>=3)
+alert("YOU WIN!");
 
-}
+else
+alert("YOU LOSE!");
 
-}
-
-function drawField(){
-
-ctx.fillStyle="#27ae60";
-ctx.fillRect(0,0,1000,600);
-
-ctx.strokeStyle="white";
-ctx.lineWidth=4;
-
-ctx.strokeRect(0,0,1000,600);
-
-ctx.beginPath();
-ctx.arc(500,300,90,0,Math.PI*2);
-ctx.stroke();
-
-ctx.beginPath();
-ctx.moveTo(500,0);
-ctx.lineTo(500,600);
-ctx.stroke();
-
-ctx.strokeRect(0,220,40,160);
-ctx.strokeRect(960,220,40,160);
+},200);
 
 }
 
-function drawPlayer(obj,color){
+}
 
-ctx.fillStyle=color;
+}
 
-ctx.beginPath();
-ctx.arc(
-obj.x,
-obj.y,
-obj.r,
-0,
-Math.PI*2
+}
+
+canvas.addEventListener("click",(e)=>{
+
+const rect=canvas.getBoundingClientRect();
+
+ballX=e.clientX-rect.left;
+
+});
+
+function draw(){
+
+ctx.clearRect(0,0,900,500);
+
+ctx.fillStyle="white";
+
+ctx.fillRect(300,40,300,60);
+
+ctx.fillStyle="red";
+
+ctx.fillRect(
+keeper.x,
+keeper.y,
+keeper.w,
+keeper.h
 );
 
+ctx.beginPath();
+ctx.arc(ballX,ballY,12,0,Math.PI*2);
 ctx.fill();
 
 }
 
-function drawBall(){
-
-ctx.fillStyle="white";
-
-ctx.beginPath();
-ctx.arc(
-ball.x,
-ball.y,
-ball.r,
-0,
-Math.PI*2
-);
-
-ctx.fill();
-
-}
-
-function drawWinner(){
-
-if(matchTime>0) return;
-
-ctx.fillStyle="rgba(0,0,0,0.6)";
-ctx.fillRect(0,0,1000,600);
-
-ctx.fillStyle="white";
-ctx.font="50px Arial";
-
-let text="DRAW";
-
-if(blueScore>redScore)
-text="BLUE TEAM WINS";
-
-if(redScore>blueScore)
-text="RED TEAM WINS";
-
-ctx.fillText(text,250,300);
-
-}
-
-function gameLoop(){
+function loop(){
 
 update();
+draw();
 
-drawField();
-
-drawPlayer(player,"blue");
-drawPlayer(ai,"red");
-
-drawBall();
-
-drawWinner();
-
-requestAnimationFrame(gameLoop);
+requestAnimationFrame(loop);
 
 }
 
-gameLoop();
+loop();
 
 </script>
 </body>
