@@ -3,28 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>⚽ PRO SOCCER 3D - 11v11 Football</title>
+  <title>⚽ PRO SOCCER 3D - 11v11 Football Game</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
     body {
-      background: #0a1a0f;
+      background: linear-gradient(135deg, #0a1a0f, #1a2f1a);
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-family: Arial, sans-serif;
+      font-family: 'Arial', sans-serif;
       padding: 10px;
       user-select: none;
       -webkit-user-select: none;
     }
     
-    .game-container {
-      background: #1a3525;
-      border-radius: 30px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-      padding: 10px;
-      max-width: 920px;
+    .game-wrapper {
+      background: linear-gradient(180deg, #1e3b2f, #0f281a);
+      border-radius: 40px;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.9);
+      padding: 15px;
+      max-width: 950px;
       width: 100%;
     }
     
@@ -32,13 +32,13 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(0,0,0,0.8);
+      background: rgba(0,0,0,0.85);
       border-radius: 30px;
-      padding: 10px 20px;
-      margin-bottom: 10px;
+      padding: 12px 20px;
+      margin-bottom: 12px;
       color: #f7e05e;
       font-weight: bold;
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       border: 2px solid #c9a24d;
       flex-wrap: wrap;
     }
@@ -46,37 +46,40 @@
     .team-info {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
     
     .team-badge {
       background: #1e3b2a;
-      padding: 5px 12px;
+      padding: 6px 14px;
       border-radius: 20px;
       color: white;
       font-size: 0.9rem;
+      border: 1px solid #c9a24d;
     }
     
     .score-num {
-      font-size: 1.8rem;
-      color: white;
-      min-width: 30px;
+      font-size: 2rem;
+      color: #fff;
+      min-width: 35px;
       text-align: center;
+      text-shadow: 0 0 15px rgba(247,224,94,0.6);
     }
     
     .timer {
       background: rgba(0,0,0,0.5);
-      padding: 8px 18px;
+      padding: 8px 20px;
       border-radius: 25px;
-      font-size: 1.4rem;
+      font-size: 1.5rem;
       color: #ffd966;
+      border: 1px solid #c9a24d;
     }
     
     canvas {
       display: block;
       width: 100%;
       height: auto;
-      border-radius: 20px;
+      border-radius: 25px;
       background: #2d7a2d;
       border: 3px solid #c6a144;
       cursor: pointer;
@@ -88,24 +91,24 @@
       flex-wrap: wrap;
       justify-content: center;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       padding: 12px;
       margin-top: 10px;
-      background: rgba(0,0,0,0.7);
+      background: rgba(0,0,0,0.75);
       border-radius: 25px;
-      border: 1px solid #b6963c;
+      border: 2px solid #b6963c;
     }
     
     .dpad {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 3px;
+      gap: 2px;
     }
     
     .dpad-row {
       display: flex;
-      gap: 8px;
+      gap: 6px;
     }
     
     .btn {
@@ -113,36 +116,41 @@
       cursor: pointer;
       font-weight: bold;
       touch-action: manipulation;
-      transition: 0.1s;
+      transition: all 0.08s;
+      outline: none;
     }
     
     .d-btn {
-      width: 45px;
-      height: 45px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
-      background: #2e4b2e;
+      background: radial-gradient(circle at 40% 40%, #5a7a4a, #1e3312);
       color: white;
-      font-size: 1.3rem;
-      border: 2px solid #8a9a6a;
-      box-shadow: 0 3px 0 #1a2a1a;
+      font-size: 1.4rem;
+      border: 2px solid #b6a86b;
+      box-shadow: 0 4px 0 #0f1f0a, 0 6px 12px rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     
     .d-btn:active {
-      transform: translateY(2px);
-      box-shadow: 0 1px 0 #1a2a1a;
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #0f1f0a, 0 3px 8px rgba(0,0,0,0.4);
     }
     
     .a-btn {
-      padding: 10px 18px;
-      border-radius: 20px;
+      padding: 12px 18px;
+      border-radius: 25px;
       font-size: 0.9rem;
       border: 2px solid;
-      box-shadow: 0 3px 0 rgba(0,0,0,0.5);
+      box-shadow: 0 4px 0 rgba(0,0,0,0.5), 0 6px 15px rgba(0,0,0,0.4);
+      white-space: nowrap;
     }
     
     .a-btn:active {
-      transform: translateY(2px);
-      box-shadow: 0 1px 0 rgba(0,0,0,0.5);
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 rgba(0,0,0,0.5), 0 3px 8px rgba(0,0,0,0.3);
     }
     
     .btn-pass { background: #3498db; color: white; border-color: #5dade2; }
@@ -154,94 +162,103 @@
     .speed-control {
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
       color: #f7e05e;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
     }
     
     .speed-control input {
-      width: 70px;
+      width: 80px;
       accent-color: #f7e05e;
+      cursor: pointer;
     }
     
-    /* Team Selection */
-    .overlay {
+    /* Team Selection Screen */
+    .team-overlay {
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.93);
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.95);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      z-index: 999;
+      z-index: 9999;
       color: white;
     }
     
-    .overlay h1 {
-      font-size: 2rem;
+    .team-overlay h1 {
+      font-size: 2.2rem;
       color: #f7e05e;
-      margin-bottom: 20px;
+      margin-bottom: 30px;
       text-align: center;
+      text-shadow: 0 0 30px rgba(247,224,94,0.5);
+      padding: 0 20px;
     }
     
     .team-grid {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 15px;
       justify-content: center;
-      max-width: 600px;
+      max-width: 650px;
       padding: 10px;
     }
     
     .team-card {
-      background: #1e3b2f;
-      padding: 12px 20px;
-      border-radius: 20px;
+      background: linear-gradient(180deg, #1e3b2f, #132a1a);
+      padding: 15px 22px;
+      border-radius: 25px;
       font-weight: bold;
-      font-size: 1rem;
+      font-size: 1.1rem;
       cursor: pointer;
       border: 2px solid #c9a24d;
       color: white;
-      transition: 0.2s;
+      transition: all 0.3s;
+      text-align: center;
+      min-width: 130px;
     }
     
     .team-card:hover {
-      background: #c9a24d;
-      color: black;
-      transform: scale(1.05);
+      background: linear-gradient(180deg, #c9a24d, #8b6914);
+      color: #000;
+      transform: scale(1.08);
+      box-shadow: 0 10px 25px rgba(201,162,77,0.4);
     }
     
-    @media (max-width: 600px) {
-      .scoreboard { font-size: 0.9rem; padding: 8px 10px; }
+    @media (max-width: 650px) {
+      .scoreboard { font-size: 0.85rem; padding: 8px 10px; }
       .score-num { font-size: 1.3rem; }
-      .timer { font-size: 1rem; padding: 5px 10px; }
-      .d-btn { width: 38px; height: 38px; font-size: 1.1rem; }
+      .timer { font-size: 1.1rem; padding: 5px 12px; }
+      .d-btn { width: 40px; height: 40px; font-size: 1.1rem; }
       .a-btn { padding: 8px 12px; font-size: 0.75rem; }
-      .overlay h1 { font-size: 1.5rem; }
-      .team-card { padding: 10px 15px; font-size: 0.85rem; }
+      .team-overlay h1 { font-size: 1.5rem; }
+      .team-card { padding: 10px 16px; font-size: 0.9rem; min-width: 100px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Team Selection -->
-  <div id="teamScreen" class="overlay">
+  <!-- Team Selection Screen -->
+  <div id="teamSelectOverlay" class="team-overlay">
     <h1>⚽ আপনার দল বাছাই করুন</h1>
-    <div class="team-grid" id="teamGrid"></div>
+    <div class="team-grid" id="teamGridContainer"></div>
+    <p style="color:#ccc; margin-top:20px; font-size:0.9rem;">প্রতিপক্ষ AI স্বয়ংক্রিয়ভাবে নির্বাচিত হবে</p>
   </div>
 
-  <!-- Game -->
-  <div class="game-container">
+  <!-- Main Game Container -->
+  <div class="game-wrapper">
     <div class="scoreboard">
       <div class="team-info">
-        <span class="team-badge" id="playerName">🇧🇷 BRA</span>
-        <span class="score-num" id="playerScore">0</span>
+        <span class="team-badge" id="playerTeamDisplay">🇧🇷 BRA</span>
+        <span class="score-num" id="playerScoreDisplay">0</span>
       </div>
       <div class="timer" id="timerDisplay">90</div>
       <div class="team-info">
-        <span class="score-num" id="aiScore">0</span>
-        <span class="team-badge" id="aiName">🇦🇷 ARG</span>
+        <span class="score-num" id="aiScoreDisplay">0</span>
+        <span class="team-badge" id="aiTeamDisplay">🇦🇷 ARG</span>
       </div>
     </div>
     
@@ -262,19 +279,22 @@
       <button class="btn a-btn btn-switch" id="btnSwitch">🔄 সুইচ</button>
       <button class="btn a-btn btn-restart" id="btnRestart">↺ রিস্টার্ট</button>
       <div class="speed-control">
-        🐢<input type="range" id="speedSlider" min="0.3" max="1.2" value="0.6" step="0.05">🐇
+        <span>🐢</span>
+        <input type="range" id="speedSlider" min="0.3" max="1.2" value="0.6" step="0.05">
+        <span>🐇</span>
       </div>
     </div>
   </div>
 
   <script>
-    // ========== GAME ENGINE ==========
     (function() {
+      // ============ CANVAS SETUP ============
       const canvas = document.getElementById('gameCanvas');
       const ctx = canvas.getContext('2d');
-      const W = 900, H = 500;
+      const W = 900;
+      const H = 500;
       
-      // Teams
+      // ============ TEAMS DATA ============
       const TEAMS = [
         { name: 'Brazil', code: 'BRA', color: '#FFD700', color2: '#006400', skin: '#F5CBA7', hair: '#2C1810', flag: '🇧🇷' },
         { name: 'Argentina', code: 'ARG', color: '#75AADB', color2: '#FFFFFF', skin: '#E8C39E', hair: '#3B2314', flag: '🇦🇷' },
@@ -286,333 +306,793 @@
         { name: 'Spain', code: 'ESP', color: '#C60B1E', color2: '#FFC400', skin: '#E8C5A0', hair: '#1A1A2E', flag: '🇪🇸' }
       ];
       
-      // State
+      // ============ GAME STATE ============
       let playerTeam = TEAMS[0];
       let aiTeam = TEAMS[1];
       let gameActive = false;
       let gameStarted = false;
       let matchTime = 90;
       let timerInterval = null;
-      let playerScore = 0, aiScore = 0;
+      let playerScore = 0;
+      let aiScore = 0;
       let speedMultiplier = 0.6;
       
-      // Player class
+      // ============ PLAYER CLASS ============
       class Player {
         constructor(x, y, role, side, team) {
-          this.x = x; this.y = y;
+          this.x = x;
+          this.y = y;
           this.role = role;
           this.side = side;
           this.team = team;
           this.r = 10;
-          this.speed = role === 'GK' ? 1.5 : role === 'DEF' ? 1.8 : role === 'MID' ? 2.0 : 2.2;
-          this.anim = Math.random() * 100;
-          this.num = role === 'GK' ? 1 : Math.floor(Math.random() * 20) + 2;
+          this.baseSpeed = role === 'GK' ? 1.5 : role === 'DEF' ? 1.8 : role === 'MID' ? 2.0 : 2.2;
+          this.animOffset = Math.random() * 100;
+          this.number = role === 'GK' ? 1 : Math.floor(Math.random() * 20) + 2;
         }
-        getSpeed() { return this.speed * speedMultiplier; }
+        getSpeed() { return this.baseSpeed * speedMultiplier; }
       }
       
-      // Game objects
+      // ============ GAME OBJECTS ============
       let homePlayers = [];
       let awayPlayers = [];
       let ball = { x: W/2, y: H/2, vx: 0, vy: 0, r: 7, rot: 0 };
       let controlledIdx = 5;
       
-      // Input
+      // ============ INPUT STATE ============
       const keys = { up: false, down: false, left: false, right: false };
-      let sprint = false;
-      let wantPass = false;
-      let wantShoot = false;
+      let sprintActive = false;
+      let passRequested = false;
+      let shootRequested = false;
       
-      // Create squad
-      function makeSquad(side, team) {
-        const s = [];
+      // ============ CREATE SQUAD ============
+      function createSquad(side, team) {
+        const squad = [];
         const isHome = side === 'home';
-        const gx = isHome ? 25 : W - 25;
-        const gy = H / 2;
+        const goalX = isHome ? 30 : W - 30;
+        const goalY = H / 2;
+        const dir = isHome ? 1 : -1;
         
-        // GK
-        s.push(new Player(gx, gy, 'GK', side, team));
+        // Goalkeeper
+        squad.push(new Player(goalX, goalY, 'GK', side, team));
         
-        // Defenders
-        [gy-70, gy-23, gy+23, gy+70].forEach(y => {
-          s.push(new Player(gx + (isHome ? 60 : -60), y, 'DEF', side, team));
+        // 4 Defenders
+        const defX = goalX + dir * 55;
+        [goalY - 68, goalY - 22, goalY + 22, goalY + 68].forEach(y => {
+          squad.push(new Player(defX, y, 'DEF', side, team));
         });
         
-        // Midfielders
-        [gy-60, gy-20, gy+20, gy+60].forEach(y => {
-          s.push(new Player(gx + (isHome ? 170 : -170), y, 'MID', side, team));
+        // 4 Midfielders
+        const midX = goalX + dir * 165;
+        [goalY - 58, goalY - 19, goalY + 19, goalY + 58].forEach(y => {
+          squad.push(new Player(midX, y, 'MID', side, team));
         });
         
-        // Forwards
-        s.push(new Player(gx + (isHome ? 260 : -260), gy-32, 'FWD', side, team));
-        s.push(new Player(gx + (isHome ? 260 : -260), gy+32, 'FWD', side, team));
+        // 2 Forwards
+        const fwdX = goalX + dir * 255;
+        squad.push(new Player(fwdX, goalY - 30, 'FWD', side, team));
+        squad.push(new Player(fwdX, goalY + 30, 'FWD', side, team));
         
-        return s;
+        return squad;
       }
       
-      // Reset
-      function resetGame() {
-        if (timerInterval) clearInterval(timerInterval);
-        homePlayers = makeSquad('home', playerTeam);
-        awayPlayers = makeSquad('away', aiTeam);
-        ball.x = W/2; ball.y = H/2; ball.vx = 0; ball.vy = 0; ball.rot = 0;
-        playerScore = 0; aiScore = 0; matchTime = 90;
+      // ============ RESET GAME ============
+      function startNewGame() {
+        // Clear old timer
+        if (timerInterval) {
+          clearInterval(timerInterval);
+          timerInterval = null;
+        }
+        
+        // Create teams
+        homePlayers = createSquad('home', playerTeam);
+        awayPlayers = createSquad('away', aiTeam);
+        
+        // Reset ball
+        ball.x = W / 2;
+        ball.y = H / 2;
+        ball.vx = 0;
+        ball.vy = 0;
+        ball.rot = 0;
+        
+        // Reset state
+        playerScore = 0;
+        aiScore = 0;
+        matchTime = 90;
         controlledIdx = 5;
-        gameActive = true; gameStarted = true;
-        updateUI();
-        timerInterval = setInterval(() => {
+        
+        // Activate game
+        gameActive = true;
+        gameStarted = true;
+        
+        // Update display
+        updateDisplay();
+        
+        // Start timer
+        timerInterval = setInterval(function() {
           if (!gameActive) return;
           matchTime--;
           document.getElementById('timerDisplay').textContent = matchTime;
-          if (matchTime <= 0) { matchTime = 0; gameActive = false; clearInterval(timerInterval); }
+          if (matchTime <= 0) {
+            matchTime = 0;
+            document.getElementById('timerDisplay').textContent = '0';
+            gameActive = false;
+            if (timerInterval) {
+              clearInterval(timerInterval);
+              timerInterval = null;
+            }
+          }
         }, 1000);
+        
+        console.log('Game Started! ' + playerTeam.name + ' vs ' + aiTeam.name);
       }
       
-      function updateUI() {
-        document.getElementById('playerScore').textContent = playerScore;
-        document.getElementById('aiScore').textContent = aiScore;
-        document.getElementById('playerName').textContent = playerTeam.flag + ' ' + playerTeam.code;
-        document.getElementById('aiName').textContent = aiTeam.flag + ' ' + aiTeam.code;
+      function updateDisplay() {
+        document.getElementById('playerScoreDisplay').textContent = playerScore;
+        document.getElementById('aiScoreDisplay').textContent = aiScore;
+        document.getElementById('playerTeamDisplay').textContent = playerTeam.flag + ' ' + playerTeam.code;
+        document.getElementById('aiTeamDisplay').textContent = aiTeam.flag + ' ' + aiTeam.code;
         document.getElementById('timerDisplay').textContent = matchTime;
       }
       
-      // AI
-      function updateAI(squad, isHome) {
+      // ============ AI SYSTEM ============
+      function updateAITeam(squad, isHome) {
         if (!gameActive) return;
-        squad.forEach(p => {
-          let tx = p.x, ty = p.y;
-          const bx = ball.x, by = ball.y;
+        
+        squad.forEach(function(p) {
+          let targetX = p.x;
+          let targetY = p.y;
+          const bx = ball.x;
+          const by = ball.y;
           
           if (p.role === 'GK') {
-            tx = isHome ? 28 : W - 28;
-            ty = Math.min(H-30, Math.max(30, by * 0.7 + H * 0.15));
+            targetX = isHome ? 28 : W - 28;
+            targetY = Math.min(H - 30, Math.max(30, by * 0.7 + H * 0.15));
           } else if (p.role === 'DEF') {
-            tx = isHome ? Math.min(bx + 50, 170) : Math.max(bx - 50, W - 170);
-            ty = by + (p.y > H/2 ? -18 : 18);
+            targetX = isHome ? Math.min(bx + 48, 165) : Math.max(bx - 48, W - 165);
+            targetY = by + (p.y > H/2 ? -18 : 18);
           } else if (p.role === 'MID') {
-            tx = bx + (isHome ? -25 : 25);
-            ty = by * 0.6 + p.y * 0.4;
+            targetX = bx + (isHome ? -28 : 28);
+            targetY = by * 0.6 + p.y * 0.4;
           } else if (p.role === 'FWD') {
-            tx = isHome ? Math.max(bx - 35, 210) : Math.min(bx + 35, W - 210);
-            ty = by;
+            targetX = isHome ? Math.max(bx - 35, 210) : Math.min(bx + 35, W - 210);
+            targetY = by;
           }
           
-          tx = Math.min(W-15, Math.max(15, tx));
-          ty = Math.min(H-15, Math.max(15, ty));
+          targetX = Math.min(W - 15, Math.max(15, targetX));
+          targetY = Math.min(H - 15, Math.max(15, targetY));
           
-          const dx = tx - p.x, dy = ty - p.y;
-          const d = Math.sqrt(dx*dx + dy*dy);
-          if (d > 1) {
-            p.x += (dx/d) * p.getSpeed() * 0.85;
-            p.y += (dy/d) * p.getSpeed() * 0.85;
+          const dx = targetX - p.x;
+          const dy = targetY - p.y;
+          const dist = Math.sqrt(dx*dx + dy*dy);
+          
+          if (dist > 1.5) {
+            p.x += (dx/dist) * p.getSpeed() * 0.85;
+            p.y += (dy/dist) * p.getSpeed() * 0.85;
           }
           
           // AI kick
-          if (Math.sqrt((p.x-bx)**2 + (p.y-by)**2) < 22 && Math.random() < 0.03) {
-            const goalX = isHome ? 20 : W - 20;
-            const a = Math.atan2(H/2 - p.y, goalX - p.x);
-            ball.vx = Math.cos(a) * 6;
-            ball.vy = Math.sin(a) * 5;
+          const distToBall = Math.sqrt((p.x-bx)*(p.x-bx) + (p.y-by)*(p.y-by));
+          if (distToBall < 22 && Math.random() < 0.03) {
+            const goalX = isHome ? 15 : W - 15;
+            const angle = Math.atan2(H/2 - p.y + (Math.random()-0.5)*60, goalX - p.x);
+            const power = 6.0 * speedMultiplier;
+            ball.vx = Math.cos(angle) * power;
+            ball.vy = Math.sin(angle) * power;
           }
         });
       }
       
-      // Home AI except controlled
-      function updateHomeAI() {
+      function updateHomeAIExceptControlled() {
         if (!gameActive) return;
-        homePlayers.forEach((p, i) => {
+        
+        homePlayers.forEach(function(p, i) {
           if (i === controlledIdx) return;
-          let tx = p.x, ty = p.y;
-          const bx = ball.x, by = ball.y;
+          
+          let targetX = p.x;
+          let targetY = p.y;
+          const bx = ball.x;
+          const by = ball.y;
           
           if (p.role === 'GK') {
-            tx = W - 28;
-            ty = Math.min(H-30, Math.max(30, by * 0.7 + H * 0.15));
+            targetX = W - 28;
+            targetY = Math.min(H - 30, Math.max(30, by * 0.7 + H * 0.15));
           } else if (p.role === 'DEF') {
-            tx = Math.max(bx - 50, W - 170);
-            ty = by + (p.y > H/2 ? -18 : 18);
+            targetX = Math.max(bx - 48, W - 165);
+            targetY = by + (p.y > H/2 ? -18 : 18);
           } else if (p.role === 'MID') {
-            tx = bx - 25;
-            ty = by * 0.6 + p.y * 0.4;
+            targetX = bx - 28;
+            targetY = by * 0.6 + p.y * 0.4;
           } else if (p.role === 'FWD') {
-            tx = Math.min(bx + 35, W - 210);
-            ty = by;
+            targetX = Math.min(bx + 35, W - 210);
+            targetY = by;
           }
           
-          tx = Math.min(W-15, Math.max(15, tx));
-          ty = Math.min(H-15, Math.max(15, ty));
+          targetX = Math.min(W - 15, Math.max(15, targetX));
+          targetY = Math.min(H - 15, Math.max(15, targetY));
           
-          const dx = tx - p.x, dy = ty - p.y;
-          const d = Math.sqrt(dx*dx + dy*dy);
-          if (d > 1) {
-            p.x += (dx/d) * p.getSpeed() * 0.8;
-            p.y += (dy/d) * p.getSpeed() * 0.8;
+          const dx = targetX - p.x;
+          const dy = targetY - p.y;
+          const dist = Math.sqrt(dx*dx + dy*dy);
+          
+          if (dist > 1.5) {
+            p.x += (dx/dist) * p.getSpeed() * 0.8;
+            p.y += (dy/dist) * p.getSpeed() * 0.8;
           }
         });
       }
       
-      // Ball physics
+      // ============ BALL PHYSICS ============
       function updateBall() {
         if (!gameActive) return;
+        
         ball.vx *= 0.985;
         ball.vy *= 0.985;
         ball.x += ball.vx;
         ball.y += ball.vy;
         ball.rot += ball.vx * 0.04;
         
+        // Top/Bottom walls
         if (ball.y < 8) { ball.y = 8; ball.vy *= -0.5; }
         if (ball.y > H - 8) { ball.y = H - 8; ball.vy *= -0.5; }
         
         // Goals
         if (ball.x < 15 && ball.y > H*0.32 && ball.y < H*0.68) {
-          aiScore++; updateUI(); resetBall();
+          aiScore++;
+          updateDisplay();
+          resetBallPosition();
+          return;
         }
         if (ball.x > W - 15 && ball.y > H*0.32 && ball.y < H*0.68) {
-          playerScore++; updateUI(); resetBall();
+          playerScore++;
+          updateDisplay();
+          resetBallPosition();
+          return;
         }
         
-        // Walls
-        if (ball.x < 8 && !(ball.y > H*0.32 && ball.y < H*0.68)) { ball.x = 8; ball.vx *= -0.4; }
-        if (ball.x > W - 8 && !(ball.y > H*0.32 && ball.y < H*0.68)) { ball.x = W - 8; ball.vx *= -0.4; }
+        // Left/Right walls
+        if (ball.x < 8 && !(ball.y > H*0.32 && ball.y < H*0.68)) {
+          ball.x = 8;
+          ball.vx *= -0.4;
+        }
+        if (ball.x > W - 8 && !(ball.y > H*0.32 && ball.y < H*0.68)) {
+          ball.x = W - 8;
+          ball.vx *= -0.4;
+        }
         
         // Player collisions
-        [...homePlayers, ...awayPlayers].forEach(p => {
-          const dx = ball.x - p.x, dy = ball.y - p.y;
-          const d = Math.sqrt(dx*dx + dy*dy);
-          const min = ball.r + p.r;
-          if (d < min && d > 0.01) {
-            const a = Math.atan2(dy, dx);
-            ball.x += Math.cos(a) * (min - d);
-            ball.y += Math.sin(a) * (min - d);
-            const nv = ball.vx * (dx/d) + ball.vy * (dy/d);
-            if (nv < 0) {
-              ball.vx -= 1.5 * nv * (dx/d);
-              ball.vy -= 1.5 * nv * (dy/d);
+        const allPlayers = homePlayers.concat(awayPlayers);
+        allPlayers.forEach(function(p) {
+          const dx = ball.x - p.x;
+          const dy = ball.y - p.y;
+          const dist = Math.sqrt(dx*dx + dy*dy);
+          const minDist = ball.r + p.r;
+          
+          if (dist < minDist && dist > 0.01) {
+            const angle = Math.atan2(dy, dx);
+            ball.x += Math.cos(angle) * (minDist - dist);
+            ball.y += Math.sin(angle) * (minDist - dist);
+            
+            const nx = dx / dist;
+            const ny = dy / dist;
+            const vn = ball.vx * nx + ball.vy * ny;
+            if (vn < 0) {
+              ball.vx -= 1.5 * vn * nx;
+              ball.vy -= 1.5 * vn * ny;
             }
           }
         });
         
-        const sp = Math.sqrt(ball.vx**2 + ball.vy**2);
-        if (sp > 9) { ball.vx *= 9/sp; ball.vy *= 9/sp; }
+        // Speed limit
+        const speed = Math.sqrt(ball.vx*ball.vx + ball.vy*ball.vy);
+        if (speed > 9) {
+          ball.vx *= 9 / speed;
+          ball.vy *= 9 / speed;
+        }
         if (Math.abs(ball.vx) < 0.03) ball.vx = 0;
         if (Math.abs(ball.vy) < 0.03) ball.vy = 0;
       }
       
-      function resetBall() {
-        ball.x = W/2; ball.y = H/2; ball.vx = 0; ball.vy = 0;
+      function resetBallPosition() {
+        ball.x = W / 2;
+        ball.y = H / 2;
+        ball.vx = 0;
+        ball.vy = 0;
+        ball.rot = 0;
       }
       
-      // Control
-      function moveControlled() {
+      // ============ PLAYER CONTROL ============
+      function moveControlledPlayer() {
         if (!gameActive || controlledIdx >= homePlayers.length) return;
-        const p = homePlayers[controlledIdx];
-        let mx = 0, my = 0;
-        if (keys.right) mx += 1;
-        if (keys.left) mx -= 1;
-        if (keys.down) my += 1;
-        if (keys.up) my -= 1;
         
-        if (mx !== 0 || my !== 0) {
-          const len = Math.sqrt(mx*mx + my*my);
-          const sp = sprint ? p.getSpeed() * 1.5 : p.getSpeed();
-          p.x += (mx/len) * sp;
-          p.y += (my/len) * sp;
-          p.x = Math.min(W-12, Math.max(12, p.x));
-          p.y = Math.min(H-12, Math.max(12, p.y));
+        const p = homePlayers[controlledIdx];
+        let moveX = 0;
+        let moveY = 0;
+        
+        if (keys.right) moveX += 1;
+        if (keys.left) moveX -= 1;
+        if (keys.down) moveY += 1;
+        if (keys.up) moveY -= 1;
+        
+        if (moveX !== 0 || moveY !== 0) {
+          const len = Math.sqrt(moveX*moveX + moveY*moveY);
+          const speed = sprintActive ? p.getSpeed() * 1.5 : p.getSpeed();
+          p.x += (moveX/len) * speed;
+          p.y += (moveY/len) * speed;
+          p.x = Math.min(W - 12, Math.max(12, p.x));
+          p.y = Math.min(H - 12, Math.max(12, p.y));
         }
         
-        if (wantPass) {
-          wantPass = false;
-          let best = null, bestD = 180;
-          homePlayers.forEach((tp, i) => {
+        // Pass
+        if (passRequested) {
+          passRequested = false;
+          let bestTarget = null;
+          let bestDist = 180;
+          
+          homePlayers.forEach(function(tp, i) {
             if (i === controlledIdx) return;
-            const d = Math.sqrt((tp.x-p.x)**2 + (tp.y-p.y)**2);
-            if (d < bestD) { bestD = d; best = tp; }
+            const d = Math.sqrt((tp.x-p.x)*(tp.x-p.x) + (tp.y-p.y)*(tp.y-p.y));
+            if (d < bestDist) {
+              bestDist = d;
+              bestTarget = tp;
+            }
           });
-          if (best) {
-            const a = Math.atan2(best.y - p.y, best.x - p.x);
-            ball.vx = Math.cos(a) * 7;
-            ball.vy = Math.sin(a) * 5;
+          
+          if (bestTarget) {
+            const angle = Math.atan2(bestTarget.y - p.y, bestTarget.x - p.x);
+            ball.vx = Math.cos(angle) * 7;
+            ball.vy = Math.sin(angle) * 5;
           }
         }
         
-        if (wantShoot) {
-          wantShoot = false;
-          const a = Math.atan2(H/2 - p.y, 15 - p.x);
-          ball.vx = Math.cos(a) * 8.5;
-          ball.vy = Math.sin(a) * 5.5;
+        // Shoot
+        if (shootRequested) {
+          shootRequested = false;
+          const angle = Math.atan2(H/2 - p.y + (Math.random()-0.5)*70, 15 - p.x);
+          ball.vx = Math.cos(angle) * 8.5;
+          ball.vy = Math.sin(angle) * 5.5;
         }
       }
       
       function switchPlayer() {
-        let best = controlledIdx, bestD = Infinity;
-        homePlayers.forEach((p, i) => {
+        let bestIdx = controlledIdx;
+        let bestDist = Infinity;
+        
+        homePlayers.forEach(function(p, i) {
           if (i === controlledIdx || p.role === 'GK') return;
-          const d = Math.sqrt((p.x-ball.x)**2 + (p.y-ball.y)**2);
-          if (d < bestD) { bestD = d; best = i; }
+          const d = Math.sqrt((p.x-ball.x)*(p.x-ball.x) + (p.y-ball.y)*(p.y-ball.y));
+          if (d < bestDist) {
+            bestDist = d;
+            bestIdx = i;
+          }
         });
-        controlledIdx = best;
+        
+        controlledIdx = bestIdx;
       }
       
-      // Draw
-      function draw() {
+      // ============ RENDERING ============
+      function drawPitch() {
         ctx.clearRect(0, 0, W, H);
         
-        // Grass
-        const g = ctx.createLinearGradient(0, 0, 0, H);
-        g.addColorStop(0, '#3a8a32'); g.addColorStop(0.5, '#4a9e3a'); g.addColorStop(1, '#2d6a1f');
-        ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+        // Grass gradient
+        const grassGrad = ctx.createLinearGradient(0, 0, 0, H);
+        grassGrad.addColorStop(0, '#3a8a32');
+        grassGrad.addColorStop(0.5, '#4a9e3a');
+        grassGrad.addColorStop(1, '#2d6a1f');
+        ctx.fillStyle = grassGrad;
+        ctx.fillRect(0, 0, W, H);
         
         // Stripes
         for (let i = 0; i < W; i += 55) {
-          ctx.fillStyle = i % 110 === 0 ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.03)';
+          ctx.fillStyle = i % 110 === 0 ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)';
           ctx.fillRect(i, 0, 27, H);
         }
         
-        // Lines
-        ctx.strokeStyle = 'rgba(255,255,255,0.5)'; ctx.lineWidth = 2;
-        ctx.beginPath(); ctx.moveTo(W/2, 0); ctx.lineTo(W/2, H); ctx.stroke();
-        ctx.beginPath(); ctx.arc(W/2, H/2, 70, 0, Math.PI*2); ctx.stroke();
-        ctx.fillStyle = 'white'; ctx.beginPath(); ctx.arc(W/2, H/2, 4, 0, Math.PI*2); ctx.fill();
+        // Center line
+        ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(W/2, 0);
+        ctx.lineTo(W/2, H);
+        ctx.stroke();
+        
+        // Center circle
+        ctx.beginPath();
+        ctx.arc(W/2, H/2, 70, 0, Math.PI * 2);
+        ctx.stroke();
+        
+        // Center dot
+        ctx.fillStyle = 'white';
+        ctx.beginPath();
+        ctx.arc(W/2, H/2, 4, 0, Math.PI * 2);
+        ctx.fill();
         
         // Goal areas
         ctx.fillStyle = 'rgba(255,255,255,0.06)';
         ctx.fillRect(0, H*0.32, 35, H*0.36);
         ctx.fillRect(W-35, H*0.32, 35, H*0.36);
-        ctx.strokeStyle = 'white'; ctx.lineWidth = 2;
+        
+        ctx.strokeStyle = 'white';
+        ctx.lineWidth = 2;
         ctx.strokeRect(0, H*0.32, 35, H*0.36);
         ctx.strokeRect(W-35, H*0.32, 35, H*0.36);
         
         // Goal nets
-        [8, W-8].forEach(gx => {
-          ctx.fillStyle = 'rgba(255,255,255,0.2)';
-          ctx.fillRect(gx-4, H*0.32, 8, H*0.36);
-          for (let y = H*0.32; y < H*0.68; y += 12) {
-            ctx.strokeStyle = 'rgba(255,255,255,0.3)'; ctx.lineWidth = 0.5;
-            ctx.beginPath(); ctx.moveTo(gx-4, y); ctx.lineTo(gx+4, y); ctx.stroke();
-          }
+        drawGoalNet(8, H*0.32, H*0.68);
+        drawGoalNet(W-8, H*0.32, H*0.68);
+      }
+      
+      function drawGoalNet(x, yTop, yBottom) {
+        ctx.fillStyle = 'rgba(255,255,255,0.2)';
+        ctx.fillRect(x-5, yTop, 10, yBottom - yTop);
+        
+        ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+        ctx.lineWidth = 0.5;
+        for (let y = yTop; y < yBottom; y += 12) {
+          ctx.beginPath();
+          ctx.moveTo(x-5, y);
+          ctx.lineTo(x+5, y);
+          ctx.stroke();
+        }
+      }
+      
+      function drawPlayer(p) {
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        
+        // Shadow
+        ctx.fillStyle = 'rgba(0,0,0,0.4)';
+        ctx.beginPath();
+        ctx.ellipse(0, 6, 9, 3, 0, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Legs with animation
+        const legSwing = Math.sin(Date.now() * 0.012 + p.animOffset) * 3;
+        ctx.strokeStyle = '#1a1a2e';
+        ctx.lineWidth = 3;
+        ctx.lineCap = 'round';
+        
+        ctx.beginPath();
+        ctx.moveTo(-2, 2);
+        ctx.lineTo(-3, 13 + legSwing);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        ctx.moveTo(2, 2);
+        ctx.lineTo(3, 13 - legSwing);
+        ctx.stroke();
+        
+        // Body
+        const bodyGrad = ctx.createLinearGradient(0, -4, 0, 7);
+        bodyGrad.addColorStop(0, p.team.color);
+        bodyGrad.addColorStop(1, p.team.color2);
+        ctx.fillStyle = bodyGrad;
+        ctx.beginPath();
+        ctx.ellipse(0, -1, 6.5, 9, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(0,0,0,0.3)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        
+        // Arms
+        ctx.strokeStyle = p.team.color;
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.moveTo(-5, -2);
+        ctx.lineTo(-9, 5);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(5, -2);
+        ctx.lineTo(9, 5);
+        ctx.stroke();
+        
+        // Head
+        ctx.fillStyle = p.team.skin;
+        ctx.beginPath();
+        ctx.arc(0, -11, 7, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Hair
+        ctx.fillStyle = p.team.hair;
+        ctx.beginPath();
+        ctx.arc(0, -13, 7, 0, Math.PI);
+        ctx.fill();
+        
+        // Eyes
+        ctx.fillStyle = 'white';
+        ctx.beginPath();
+        ctx.arc(-2, -11, 1.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(2, -11, 1.5, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Pupils
+        ctx.fillStyle = '#111';
+        ctx.beginPath();
+        ctx.arc(-2, -11, 0.7, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(2, -11, 0.7, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Jersey number
+        ctx.fillStyle = 'white';
+        ctx.font = 'bold 6px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(p.number, 0, 2);
+        
+        // Controlled player indicator
+        if (p.side === 'home' && homePlayers.indexOf(p) === controlledIdx && gameActive) {
+          ctx.strokeStyle = '#FFD700';
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          ctx.arc(0, 0, 15, 0, Math.PI * 2);
+          ctx.stroke();
+          
+          ctx.fillStyle = '#FFD700';
+          ctx.beginPath();
+          ctx.moveTo(0, -17);
+          ctx.lineTo(-4, -13);
+          ctx.lineTo(4, -13);
+          ctx.closePath();
+          ctx.fill();
+        }
+        
+        ctx.restore();
+      }
+      
+      function drawBall() {
+        ctx.save();
+        ctx.translate(ball.x, ball.y);
+        ctx.rotate(ball.rot);
+        
+        // Ball shadow
+        ctx.fillStyle = 'rgba(0,0,0,0.3)';
+        ctx.beginPath();
+        ctx.arc(0, 1, ball.r, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Ball body
+        const ballGrad = ctx.createRadialGradient(-2, -2, 1, 0, 0, ball.r);
+        ballGrad.addColorStop(0, '#FFFFFF');
+        ballGrad.addColorStop(0.7, '#DDDDDD');
+        ballGrad.addColorStop(1, '#999999');
+        ctx.fillStyle = ballGrad;
+        ctx.beginPath();
+        ctx.arc(0, 0, ball.r, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Outline
+        ctx.strokeStyle = '#333';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        
+        // Pentagon pattern
+        for (let i = 0; i < 5; i++) {
+          const angle = i * Math.PI * 2 / 5;
+          ctx.strokeStyle = '#444';
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.lineTo(Math.cos(angle) * 6, Math.sin(angle) * 6);
+          ctx.stroke();
+        }
+        
+        ctx.restore();
+      }
+      
+      function render() {
+        drawPitch();
+        
+        // Draw away players first (behind)
+        awayPlayers.forEach(function(p) { drawPlayer(p); });
+        
+        // Draw ball
+        drawBall();
+        
+        // Draw home players
+        homePlayers.forEach(function(p) { drawPlayer(p); });
+        
+        // Game over overlay
+        if (!gameActive && gameStarted) {
+          ctx.fillStyle = 'rgba(0,0,0,0.7)';
+          ctx.fillRect(0, 0, W, H);
+          
+          ctx.fillStyle = '#FFD700';
+          ctx.font = 'bold 38px Arial';
+          ctx.textAlign = 'center';
+          
+          let message = 'ম্যাচ শেষ!';
+          if (playerScore > aiScore) message = '🎉 আপনি জিতেছেন!';
+          else if (aiScore > playerScore) message = '😞 AI জিতেছে';
+          else message = '🤝 ড্র হয়েছে';
+          
+          ctx.fillText(message, W/2, H/2 - 15);
+          
+          ctx.font = 'bold 20px Arial';
+          ctx.fillText('রিস্টার্ট বাটনে ক্লিক করুন', W/2, H/2 + 40);
+        }
+      }
+      
+      // ============ GAME LOOP ============
+      function gameLoop() {
+        if (gameActive) {
+          moveControlledPlayer();
+          updateHomeAIExceptControlled();
+          updateAITeam(awayPlayers, false);
+          updateBall();
+        }
+        
+        render();
+        requestAnimationFrame(gameLoop);
+      }
+      
+      // ============ EVENT HANDLERS ============
+      
+      // Keyboard controls
+      window.addEventListener('keydown', function(e) {
+        switch(e.key.toLowerCase()) {
+          case 'w': case 'arrowup': keys.up = true; e.preventDefault(); break;
+          case 's': case 'arrowdown': keys.down = true; e.preventDefault(); break;
+          case 'a': case 'arrowleft': keys.left = true; e.preventDefault(); break;
+          case 'd': case 'arrowright': keys.right = true; e.preventDefault(); break;
+          case 'shift': sprintActive = true; e.preventDefault(); break;
+          case ' ': shootRequested = true; e.preventDefault(); break;
+          case 'q': passRequested = true; e.preventDefault(); break;
+          case 'tab': switchPlayer(); e.preventDefault(); break;
+        }
+      });
+      
+      window.addEventListener('keyup', function(e) {
+        switch(e.key.toLowerCase()) {
+          case 'w': case 'arrowup': keys.up = false; break;
+          case 's': case 'arrowdown': keys.down = false; break;
+          case 'a': case 'arrowleft': keys.left = false; break;
+          case 'd': case 'arrowright': keys.right = false; break;
+          case 'shift': sprintActive = false; break;
+        }
+      });
+      
+      // Mobile D-Pad buttons
+      function setupDPadButton(id, keyProperty) {
+        const btn = document.getElementById(id);
+        if (!btn) return;
+        
+        btn.addEventListener('mousedown', function(e) {
+          e.preventDefault();
+          keys[keyProperty] = true;
         });
         
-        // Players
-        [...homePlayers, ...awayPlayers].forEach(p => {
-          ctx.save(); ctx.translate(p.x, p.y);
+        btn.addEventListener('mouseup', function(e) {
+          e.preventDefault();
+          keys[keyProperty] = false;
+        });
+        
+        btn.addEventListener('mouseleave', function(e) {
+          keys[keyProperty] = false;
+        });
+        
+        btn.addEventListener('touchstart', function(e) {
+          e.preventDefault();
+          keys[keyProperty] = true;
+        });
+        
+        btn.addEventListener('touchend', function(e) {
+          e.preventDefault();
+          keys[keyProperty] = false;
+        });
+        
+        btn.addEventListener('touchcancel', function(e) {
+          keys[keyProperty] = false;
+        });
+      }
+      
+      setupDPadButton('btnUp', 'up');
+      setupDPadButton('btnDown', 'down');
+      setupDPadButton('btnLeft', 'left');
+      setupDPadButton('btnRight', 'right');
+      
+      // Sprint button
+      const sprintBtn = document.getElementById('btnSprint');
+      if (sprintBtn) {
+        sprintBtn.addEventListener('mousedown', function(e) { e.preventDefault(); sprintActive = true; });
+        sprintBtn.addEventListener('mouseup', function(e) { e.preventDefault(); sprintActive = false; });
+        sprintBtn.addEventListener('mouseleave', function(e) { sprintActive = false; });
+        sprintBtn.addEventListener('touchstart', function(e) { e.preventDefault(); sprintActive = true; });
+        sprintBtn.addEventListener('touchend', function(e) { e.preventDefault(); sprintActive = false; });
+      }
+      
+      // Pass button
+      document.getElementById('btnPass')?.addEventListener('click', function(e) {
+        e.preventDefault();
+        passRequested = true;
+      });
+      
+      // Shoot button
+      document.getElementById('btnShoot')?.addEventListener('click', function(e) {
+        e.preventDefault();
+        shootRequested = true;
+      });
+      
+      // Switch button
+      document.getElementById('btnSwitch')?.addEventListener('click', function(e) {
+        e.preventDefault();
+        switchPlayer();
+      });
+      
+      // Restart button
+      document.getElementById('btnRestart')?.addEventListener('click', function(e) {
+        e.preventDefault();
+        startNewGame();
+      });
+      
+      // Speed slider
+      document.getElementById('speedSlider')?.addEventListener('input', function(e) {
+        speedMultiplier = parseFloat(e.target.value);
+      });
+      
+      // ============ TEAM SELECTION ============
+      function setupTeamSelection() {
+        const grid = document.getElementById('teamGridContainer');
+        if (!grid) {
+          console.error('Team grid not found!');
+          return;
+        }
+        
+        grid.innerHTML = '';
+        
+        TEAMS.forEach(function(team, index) {
+          const card = document.createElement('div');
+          card.className = 'team-card';
+          card.textContent = team.flag + ' ' + team.name;
+          card.style.cursor = 'pointer';
           
-          // Shadow
-          ctx.fillStyle = 'rgba(0,0,0,0.4)'; ctx.beginPath();
-          ctx.ellipse(0, 6, 9, 3, 0, 0, Math.PI*2); ctx.fill();
+          card.addEventListener('click', function() {
+            console.log('Team selected: ' + team.name);
+            playerTeam = team;
+            aiTeam = TEAMS[(index + 1) % TEAMS.length];
+            
+            // Hide overlay
+            const overlay = document.getElementById('teamSelectOverlay');
+            if (overlay) {
+              overlay.style.display = 'none';
+            }
+            
+            // Start the game
+            startNewGame();
+          });
           
-          // Legs
-          const swing = Math.sin(Date.now()*0.01 + p.anim) * 3;
-          ctx.strokeStyle = '#1a1a2e'; ctx.lineWidth = 3; ctx.lineCap = 'round';
-          ctx.beginPath(); ctx.moveTo(-2, 2); ctx.lineTo(-3, 13 + swing); ctx.stroke();
-          ctx.beginPath(); ctx.moveTo(2, 2); ctx.lineTo(3, 13 - swing); ctx.stroke();
-          
-          // Body
-          const bg = ctx.createLinearGradient(0, -4, 0, 7);
-          bg.addColorStop(0, p.team.color); bg.addColorStop(1, p.team.color2);
-          ctx.fillStyle = bg;
-          ctx.beginPath(); ctx.ellipse(0, -1, 6.5, 9, 0, 0, Math.PI*2); ctx.fill();
-          ctx.strokeStyle = 'rgba(0,0,0,0.3)'; ctx.lineWidth = 1; ctx.stroke();
-          
-          // Arms
- 
+          grid.appendChild(card);
+        });
+        
+        console.log('Team selection setup complete. ' + TEAMS.length + ' teams loaded.');
+      }
+      
+      // ============ INITIALIZATION ============
+      function init() {
+        console.log('Initializing game...');
+        
+        // Setup team selection
+        setupTeamSelection();
+        
+        // Update display
+        updateDisplay();
+        
+        // Don't start game yet - wait for team selection
+        gameActive = false;
+        gameStarted = false;
+        
+        // Start rendering loop
+        gameLoop();
+        
+        console.log('Game initialized. Waiting for team selection...');
+      }
+      
+      // Start everything
+      init();
+      
+    })();
+  </script>
+</body>
+</html>
